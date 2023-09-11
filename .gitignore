@@ -1,1 +1,12 @@
+.env
 
+# Jupiter Notebook #
+*checkpoint.ipynb
+*.ipynb_checkpoints
+
+# File formats #
+*.zip
+*.midi
+
+# Data files #
+Data/
