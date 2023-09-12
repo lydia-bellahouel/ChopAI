@@ -1,8 +1,6 @@
 # basic imports
 pandas
 numpy
-os
-sys
 
 # modelling imports
 tensorflow

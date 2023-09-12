@@ -145,3 +145,11 @@ def get_midi_data_as_images():
         midi2image(file_path)
 
 #################################
+
+
+if __name__ == '__main__':
+    try:
+        get_midi_data_as_images()
+        print("✅ images created")
+    except:
+        print("❌ data transformation could not run")
