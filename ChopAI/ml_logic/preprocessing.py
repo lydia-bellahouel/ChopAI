@@ -15,44 +15,44 @@ def create_and_preprocess_X_y():
     """
 
     folder_list = [folder for folder in os.listdir("../../data_image")]
-    print(folder_list)
 
-    len_max = 0 # Maximum number of images per music piece in dataset
+    len_max = 0  # Maximum number of images per music piece in dataset
     for folder in folder_list:
         image_list = [image for image in os.listdir(f"../../data_image/{folder}")]
-        if len(image_list) > len_max :
+        if len(image_list) > len_max:
             len_max = len(image_list)
 
-    X = np.zeros((len(folder_list), (len_max-1)*100, 106), dtype=float)
-    y = np.zeros((len(folder_list), 100, 106), dtype= float)
+    X = np.zeros((len(folder_list), (len_max - 1) * 100, 106), dtype=float)
+    y = np.zeros((len(folder_list), 100, 106), dtype=float)
 
     for index_folder, folder in enumerate(folder_list):
         image_list = [image for image in os.listdir(f"../../data_image/{folder}")]
         nb_images = len(image_list)
-        folder_X = np.full(((len_max-1)*100, 106), -1, dtype = float)
+        folder_X = np.full(((len_max - 1) * 100, 106), -1, dtype=float)
 
         for index_image, image in enumerate(image_list):
             image_array = np.transpose(plt.imread(f"../../data_image/{folder}/{image}"))
-            if index_image < (nb_images -1):
-                folder_X[index_image*100 : (index_image+1)*100, :] = image_array
-            elif index_image == (nb_images-1):
+            if index_image < (nb_images - 1):
+                folder_X[index_image * 100: (index_image + 1) * 100, :] = image_array
+            elif index_image == (nb_images - 1):
                 folder_y = image_array
 
-    X[index_folder, :, :] = folder_X
-    y[index_folder, :, :] = folder_y
+        X[index_folder, :, :] = folder_X
+        y[index_folder, :, :] = folder_y
 
     return X, y
 
 #################################
 
-def create_train_test_set(X, y):
+def create_train_test_set(X, y, train_size):
     """
     Create train and test sets from X and y:
-        - Train set contains first 70 music pieces (~80%)
-        - Test set contains last 18 music pieces (~20%)
+        - Train set contains first X music pieces (train_size)
+        - Test set contains last Y music pieces (1-train_size)
     """
-    X_train = X[0:70, :, :]
-    y_train = y[0:70, :, :]
-    X_test = X[70:88, :, :]
-    y_test = y[70:88, :, :]
+    total_samples = X.shape[0]
+    train_samples = int(total_samples * train_size)
+    X_train, y_train = X[:train_samples], y[:train_samples]
+    X_test, y_test = X[train_samples:], y[train_samples:]
+
     return X_train, X_test, y_train, y_test
