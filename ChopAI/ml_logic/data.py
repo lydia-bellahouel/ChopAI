@@ -1,17 +1,31 @@
-from imageio import imwrite
-import os
-from music21 import converter, instrument, note, chord
+# Imports
+
 import numpy as np
+import os
+
+from imageio import imwrite
+from music21 import converter, instrument, note, chord
+
+#################################
 
 def extractNote(element):
     return int(element.pitch.ps)
 
+#################################
+
 def extractDuration(element):
     return element.duration.quarterLength
 
+#################################
+
 def get_notes(notes_to_parse):
 
-    """ Get all the notes and chords from the midi files in the ./midi_songs directory """
+    """
+    Get all the notes and chords from the midi files into a dictionary containing:
+        - Start: unit time at which the note starts playing
+        - Pitch: pitch of the note
+        - Duration: number of time units the note is played for
+    """
     durations = []
     notes = []
     start = []
@@ -35,10 +49,18 @@ def get_notes(notes_to_parse):
 
     return {"start":start, "pitch":notes, "dur":durations}
 
+#################################
 
 def midi2image(midi_path, max_repetitions = float("inf"), resolution = 0.25, lowerBoundNote = 21, upperBoundNote = 127, maxSongLength = 100):
 
-    output_folder = f"Data_image/{midi_path.split('/')[-1].replace('.mid', '')}"
+    """
+    1) Transform a midi file into a set of images:
+        - Each image has a size of 106 (all notes between lowerBound and upperBound) x 100 time units (maxSongLength)
+        - One time unit corresponds to 0.25 (resolution) beat from the original music
+    2) Store images into the corresponding sub-folder (identified by music piece name) of the 'data_image' folder
+    """
+
+    output_folder = f"data_image/{midi_path.split('/')[-1].replace('.mid', '')}"
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
@@ -68,7 +90,6 @@ def midi2image(midi_path, max_repetitions = float("inf"), resolution = 0.25, low
         data["instrument_0"] = get_notes(notes_to_parse)
 
     for instrument_name, values in data.items():
-        # https://en.wikipedia.org/wiki/Scientific_pitch_notation#Similar_systems
 
         pitches = values["pitch"]
         durs = values["dur"]
@@ -95,21 +116,32 @@ def midi2image(midi_path, max_repetitions = float("inf"), resolution = 0.25, low
             else:
                 break
 
-def get_midi_data_as_images():
-    files_raw = [file for file in os.listdir('Data')]
-    files = []
+#################################
 
+def get_midi_data_as_images():
+
+    """
+    Iterate on all midi files from the 'data_raw' folder to:
+        - Keep music pieces with one piano only
+        - Store all corresponding images into 'data_image' file
+    """
+    # Storing all midi files into a 'files_raw' list
+    files_raw = [file for file in os.listdir('data_raw')]
+
+    # Storing all midi files with only one piano in a 'files' list
+    files = []
     for file in files_raw:
         try:
-            mid = converter.parse(f'Data/{file}')
+            mid = converter.parse(f'data_raw/{file}')
             file_instruments = instrument.partitionByInstrument(mid)
             if len(file_instruments)==1:
                 files.append(file)
         except:
             pass
 
-    # Iterating on all files
-
+    # Iterating on all files from 'files' list to create images
     for file in files:
-        file_path = f"Data/{file}"
+        file_path = f"data_raw/{file}"
         midi2image(file_path)
+
+#################################

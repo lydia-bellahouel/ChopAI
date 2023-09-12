@@ -9,4 +9,5 @@
 *.midi
 
 # Data files #
-Data/
+data_raw/
+data_image/
