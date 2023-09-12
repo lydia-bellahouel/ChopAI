@@ -152,4 +152,4 @@ if __name__ == '__main__':
         get_midi_data_as_images()
         print("✅ images created")
     except:
-        print("❌ data transformation could not run")
+        print("❌ data transformation  could not run")
