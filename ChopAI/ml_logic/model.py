@@ -28,7 +28,7 @@ def calculate_metric(y_pred, y_true):
 
 #################################
 
-def create_y_pred_baseline(train_size):
+def create_y_pred_baseline(train_size = 0.8, nb_input_images=3):
     """
     Based on last seen sequence, get:
         - y_train_pred: predictions for the train set
@@ -38,17 +38,16 @@ def create_y_pred_baseline(train_size):
 
     folder_list = [folder for folder in os.listdir("../../data_image")]
 
-    y_pred = np.zeros((len(folder_list), 100, 106), dtype=float)
+    y_pred = np.zeros((len(folder_list), 1, 106))
 
     for index_folder, folder in enumerate(folder_list):
         image_list = [image for image in os.listdir(f"../../data_image/{folder}")]
-        nb_images = len(image_list)
 
         for index_image, image in enumerate(image_list):
             image_array = np.transpose(plt.imread(f"../../data_image/{folder}/{image}"))
-            if index_image == (nb_images - 2):
+            if index_image == (nb_input_images - 2):
                 #to assign the image to the corresponding position in y_pred
-                y_pred[index_folder, :, :] = image_array
+                y_pred[index_folder, :, :] = image_array[0:1,:]
 
     # Splitting y_pred into y_train_pred and y_test_pred
     total_samples = len(folder_list)
