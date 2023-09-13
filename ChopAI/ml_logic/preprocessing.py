@@ -29,6 +29,7 @@ def create_and_preprocess_X_y():
         image_list = [image for image in os.listdir(f"../../data_image/{folder}")]
         nb_images = len(image_list)
         folder_X = np.full(((len_max - 1) * 100, 106), -1, dtype=float)
+        folder_y = np.full((100, 106), -1, dtype=float)
 
         for index_image, image in enumerate(image_list):
             image_array = np.transpose(plt.imread(f"../../data_image/{folder}/{image}"))
@@ -37,8 +38,8 @@ def create_and_preprocess_X_y():
             elif index_image == (nb_images - 1):
                 folder_y = image_array
 
-        X[index_folder, :, :] = folder_X
-        y[index_folder, :, :] = folder_y
+            X[index_folder, :, :] = folder_X
+            y[index_folder, :, :] = folder_y
 
     return X, y
 
@@ -47,12 +48,12 @@ def create_and_preprocess_X_y():
 def create_train_test_set(X, y, train_size):
     """
     Create train and test sets from X and y:
-        - Train set contains first X music pieces (train_size)
-        - Test set contains last Y music pieces (1-train_size)
+        - Train set contains first (train_size)% music pieces
+        - Test set contains last (1-train_size)% music pieces
     """
     total_samples = X.shape[0]
     train_samples = int(total_samples * train_size)
-    X_train, y_train = X[:train_samples], y[:train_samples]
-    X_test, y_test = X[train_samples:], y[train_samples:]
+    X_train, y_train = X[:train_samples,:,:], y[:train_samples,:,:]
+    X_test, y_test = X[train_samples:,:,:], y[train_samples:,:,:]
 
     return X_train, X_test, y_train, y_test
