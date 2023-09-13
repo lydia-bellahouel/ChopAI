@@ -22,13 +22,13 @@ def calculate_metric(y_pred, y_true):
     numerator = abs(y_true - y_pred)
     denominator = y_true + y_pred + epsilon
 
-    metric_baseline = numerator / denominator
+    metric_baseline = 1-(numerator / denominator)
     metric_baseline = (metric_baseline.sum())/(metric_baseline.shape[0]*metric_baseline.shape[1]*metric_baseline.shape[2])
     return(metric_baseline)
 
 #################################
 
-def create_y_pred_baseline(train_size = 0.8, nb_input_images=3):
+def create_y_pred_baseline(train_size = 0.8, nb_input_images=10):
     """
     Based on last seen sequence, get:
         - y_train_pred: predictions for the train set
@@ -36,9 +36,9 @@ def create_y_pred_baseline(train_size = 0.8, nb_input_images=3):
     Use same train_size as in ml_logic/preprocessing/create_train_test_set to split y_pred with same ratio
     """
 
-    folder_list = [folder for folder in os.listdir("../../data_image")]
+    folder_list = [folder for folder in os.listdir("../../data_image") if len(os.listdir(f"../../data_image/{folder}"))>=nb_input_images]
 
-    y_pred = np.zeros((len(folder_list), 1, 106))
+    y_pred = np.zeros((len(folder_list), 100, 106))
 
     for index_folder, folder in enumerate(folder_list):
         image_list = [image for image in os.listdir(f"../../data_image/{folder}")]
@@ -47,7 +47,7 @@ def create_y_pred_baseline(train_size = 0.8, nb_input_images=3):
             image_array = np.transpose(plt.imread(f"../../data_image/{folder}/{image}"))
             if index_image == (nb_input_images - 2):
                 #to assign the image to the corresponding position in y_pred
-                y_pred[index_folder, :, :] = image_array[0:1,:]
+                y_pred[index_folder, :, :] = image_array
 
     # Splitting y_pred into y_train_pred and y_test_pred
     total_samples = len(folder_list)
