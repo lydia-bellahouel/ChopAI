@@ -17,6 +17,17 @@ from preprocessing import create_and_preprocess_X_y, create_train_test_set
 
 #################################
 
+def calculate_metric(y_pred, y_true):
+    epsilon = 1e-10  # Small constant to prevent division by zero
+    numerator = abs(y_true - y_pred)
+    denominator = y_true + y_pred + epsilon
+
+    metric_baseline = numerator / denominator
+    metric_baseline = (metric_baseline.sum())/(metric_baseline.shape[0]*metric_baseline.shape[1]*metric_baseline.shape[2])
+    return(metric_baseline)
+
+#################################
+
 def create_y_pred_baseline(train_size):
     """
     Based on last seen sequence, get:
@@ -47,15 +58,12 @@ def create_y_pred_baseline(train_size):
 
     return y_train_pred_baseline, y_test_pred_baseline
 
+#################################
 
-def score_baseline():
+def baseline_metric_score():
     X, y = create_and_preprocess_X_y()
     X_train, X_test, y_train, y_test = create_train_test_set(X,y,0.8)
     y_train_pred_baseline, y_test_pred_baseline = create_y_pred_baseline(0.8)
-    epsilon = 1e-10  # Small constant to prevent division by zero
 
-    numerator = abs(y_test - y_test_pred_baseline)
-    denominator = y_test + y_test_pred_baseline + epsilon
-
-    metric_baseline = numerator / denominator
-    metric_baseline.sum()
+    score = calculate_metric(y_test_pred_baseline, y_test)
+    return(score)
