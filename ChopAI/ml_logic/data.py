@@ -60,7 +60,7 @@ def midi2image(midi_path, max_repetitions = float("inf"), resolution = 0.25, low
     2) Store images into the corresponding sub-folder (identified by music piece name) of the 'data_image' folder
     """
 
-    output_folder = f"data_image/{midi_path.split('/')[-1].replace('.mid', '')}"
+    output_folder = f"../../data_image/{midi_path.split('/')[-1].replace('.mid', '')}"
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
@@ -118,21 +118,21 @@ def midi2image(midi_path, max_repetitions = float("inf"), resolution = 0.25, low
 
 #################################
 
-def get_midi_data_as_images():
+def get_midi_data_as_images(midi_path):
 
     """
-    Iterate on all midi files from the 'data_raw' folder to:
+    Iterate on all midi files from the 'midi_path' folder to:
         - Keep music pieces with one piano only
         - Store all corresponding images into 'data_image' file
     """
     # Storing all midi files into a 'files_raw' list
-    files_raw = [file for file in os.listdir('data_raw')]
+    files_raw = [file for file in os.listdir(midi_path)]
 
     # Storing all midi files with only one piano in a 'files' list
     files = []
     for file in files_raw:
         try:
-            mid = converter.parse(f'data_raw/{file}')
+            mid = converter.parse(f'{midi_path}/{file}')
             file_instruments = instrument.partitionByInstrument(mid)
             if len(file_instruments)==1:
                 files.append(file)
@@ -141,7 +141,7 @@ def get_midi_data_as_images():
 
     # Iterating on all files from 'files' list to create images
     for file in files:
-        file_path = f"data_raw/{file}"
+        file_path = f"{midi_path}/{file}"
         midi2image(file_path)
 
 #################################
@@ -149,7 +149,7 @@ def get_midi_data_as_images():
 
 if __name__ == '__main__':
     try:
-        get_midi_data_as_images()
+        get_midi_data_as_images('../../data_raw')
         print("✅ images created")
     except:
         print("❌ data transformation  could not run")
