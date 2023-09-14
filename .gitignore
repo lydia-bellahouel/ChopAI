@@ -12,3 +12,7 @@
 data_raw/
 data_image/
 __pycache__/
+
+data_split/
+checklist_lstm/
+data_vocab/
