@@ -11,4 +11,6 @@
 # Data files #
 data_raw/
 data_image/
+data_image_cleaned/
+data_test/
 __pycache__/
