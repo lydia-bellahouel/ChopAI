@@ -13,7 +13,6 @@ import sys
 from imageio import imwrite
 from music21 import converter, instrument, note, chord, converter
 from PIL import Image, ImageOps
-import mido
 
 ############################################################################
 # Converting one midi file into an image
@@ -229,34 +228,3 @@ def show_image_from_pixels(pixels_matrix, image_number):
     """
     plt.imshow(np.squeeze(pixels_matrix[image_number, :, :, :]))
     plt.show()
-
-############################################################################
-# Script execution
-############################################################################
-
-if __name__ == '__main__':
-
-    # Selecting music pieces with one piano only and converting them to images
-    # Images stored in the 'data_image' folder
-    try:
-        get_clean_midi_data_as_images('../../data_raw/', '../../data_image/')
-        print("✅ images created")
-    except:
-        print("❌ data transformation could not run")
-
-    # Cleaning the dataset of images
-    # Images stored in the 'data_image_cleaned' folder
-    try:
-        clean_images('../../data_image/', '../../data_image_cleaned/')
-        print("✅ images cleaned")
-    except:
-        print("❌ images' cleaning could not run")
-
-    # Creating an array of images to be used as dataset in Python
-    # All images are stored one by one in an array of dimension n_images * 106 * 106 * 1
-    # 106 x 106 = image dimension / 1 = additional dimension needed for RNN input
-    try:
-        pixels = get_pixels_array('../../data_image_cleaned/')
-        print("✅ dataset as array available in 'pixels' variable")
-    except:
-        print("❌ conversion of images into array could not run")
