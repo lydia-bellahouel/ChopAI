@@ -14,3 +14,7 @@ data_image/
 data_image_cleaned/
 data_test/
 __pycache__/
+
+data_split/
+checklist_lstm/
+data_vocab/
