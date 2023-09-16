@@ -31,7 +31,7 @@ from tensorflow.keras.layers import Activation
 from tensorflow.keras.layers import BatchNormalization as BatchNorm
 from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.callbacks import EarlyStopping
-#import tensorflow.keras.regularizers as regularizers
+
 
 
 #################################
@@ -41,17 +41,28 @@ def initialize_and_compile_LSTM_model(X_train, n_vocab_train):
     """Define model architecture"""
 
     model = Sequential()
+    model.add(
+        LSTM(256,
+             input_shape=(X_train.shape[1], X_train.shape[2]),
+             recurrent_dropout=0.3,
+             return_sequences=True))
     model.add(LSTM(
-        int(n_vocab_train),
-        input_shape=(X_train.shape[1], X_train.shape[2]),
+        256,
         return_sequences=True,
+        recurrent_dropout=0.3,
     ))
-
-    model.add(LSTM(int(n_vocab_train/2)))
-
+    model.add(LSTM(256))
+    model.add(BatchNorm())
+    model.add(Dropout(0.3))
+    model.add(Dense(256))
+    model.add(Activation('relu'))
+    model.add(BatchNorm())
+    model.add(Dropout(0.3))
     model.add(Dense(n_vocab_train))
     model.add(Activation('softmax'))
-    model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+    model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=["accuracy"])
+
+    print('Network is created')
 
     return model
 
