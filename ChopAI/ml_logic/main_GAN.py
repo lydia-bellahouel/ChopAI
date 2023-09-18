@@ -1,6 +1,12 @@
+from ChopAI.ml_logic.preprocessing_GAN import get_clean_midi_data_as_images, clean_images, get_pixels_array
+from ChopAI.ml_logic.model_GAN import def_discriminator, def_generator, def_gan, train
+import os
 
-from preprocessing_GAN import get_clean_midi_data_as_images, clean_images, get_pixels_array
-from model_GAN import def_discriminator, def_generator, def_gan, train
+root_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+path_data_raw = os.path.join(root_path,'data_raw/')
+path_data_image = os.path.join(root_path,'data_image/')
+path_data_image_cleaned = os.path.join(root_path,'data_image_cleaned/')
+
 
 ############################################################################
 # preprocessing execution to get inputs for GAN model
@@ -8,25 +14,33 @@ from model_GAN import def_discriminator, def_generator, def_gan, train
 
 # Selecting music pieces with one piano only and converting them to images
 # Images stored in the 'data_image' folder
-try:
-    get_clean_midi_data_as_images('../../data_raw/', '../../data_image/')
-    print("✅ images created")
-except:
-    print("❌ midi files transformation to images could not run")
+
+if not os.path.exists(path_data_image):
+    try:
+        get_clean_midi_data_as_images(path_data_raw, path_data_image)
+        print("✅ images created")
+    except:
+        print("❌ midi files transformation to images could not run")
+else:
+    pass
 
 # Cleaning the dataset of images
 # Images stored in the 'data_image_cleaned' folder
-try:
-    clean_images('../../data_image/', '../../data_image_cleaned/')
-    print("✅ images cleaned")
-except:
-    print("❌ images cleaning could not run")
+
+if not os.path.exists(path_data_image_cleaned):
+    try:
+        clean_images(path_data_image, path_data_image_cleaned)
+        print("✅ images cleaned")
+    except:
+        print("❌ images cleaning could not run")
+else:
+    pass
 
 # Creating an array of images to be used as dataset in Python for GAN model
 # All images are stored one by one in an array of dimension n_images * 106 * 106 * 1
 # 106 x 106 = image dimension / 1 = additional dimension needed for RNN input
 try:
-    pixels = get_pixels_array('../../data_image_cleaned/')
+    pixels = get_pixels_array(path_data_image_cleaned)
     print("✅ dataset as array available in 'pixels' variable")
 except:
     print("❌ conversion of images into array could not run")
