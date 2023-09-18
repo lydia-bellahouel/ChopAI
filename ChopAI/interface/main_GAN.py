@@ -73,7 +73,7 @@ except:
 
 # Training GAN model on pixels dataset
 try:
-    model, info = train(generator_model, discriminator_model, gan_model, pixels)
+    generator_model, discriminator_model, gan_model, discriminator_info_per_epoch, images_generated_per_epoch = train(generator_model, discriminator_model, gan_model, pixels)
     print("✅ GAN model trained")
 except:
     print("❌ training of GAN model could not run")
