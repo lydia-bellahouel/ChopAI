@@ -1,11 +1,18 @@
 from ChopAI.ml_logic.preprocessing_GAN import get_clean_midi_data_as_images, clean_images, get_pixels_array
-from ChopAI.ml_logic.model_GAN import def_discriminator, def_generator, def_gan, train
+from ChopAI.ml_logic.model_GAN import def_discriminator, def_generator, def_gan, train, save_discriminator, save_generator, save_GAN, save_discriminator_info, save_images_generated
 import os
 
 root_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+
 path_data_raw = os.path.join(root_path,'data_raw/')
 path_data_image = os.path.join(root_path,'data_image/')
 path_data_image_cleaned = os.path.join(root_path,'data_image_cleaned/')
+
+path_discriminator_model = os.path.join(root_path,'discriminator_model/')
+path_generator_model = os.path.join(root_path,'generator_model/')
+path_gan_model = os.path.join(root_path,'gan_model/')
+path_discriminator_info = os.path.join(root_path,'discriminator_info/')
+path_images_generated_per_epoch = os.path.join(root_path,'images_generated_per_epoch/')
 
 
 ############################################################################
@@ -77,3 +84,44 @@ try:
     print("✅ GAN model trained")
 except:
     print("❌ training of GAN model could not run")
+
+
+############################################################################
+# Saving models and info at the end of training
+############################################################################
+
+
+# Save discriminator model
+try:
+    save_discriminator(discriminator_model, path_discriminator_model)
+    print("✅ discriminator model saved")
+except:
+    print("❌ discriminator model could not be saved")
+
+# Save generator model
+try:
+    save_generator(generator_model, path_generator_model)
+    print("✅ generator model saved")
+except:
+    print("❌ generator model could not be saved")
+
+# Save GAN model
+try:
+    save_GAN(gan_model, path_gan_model)
+    print("✅ GAN model saved")
+except:
+    print("❌ GAN model could not be saved")
+
+# Save discriminator info
+try:
+    save_discriminator_info(discriminator_info_per_epoch, path_discriminator_info)
+    print("✅ discriminator info saved")
+except:
+    print("❌ discriminator info could not be saved")
+
+# Save images generated during the training
+try:
+    save_images_generated(images_generated_per_epoch, path_images_generated_per_epoch)
+    print("✅ images generated during training saved")
+except:
+    print("❌ images could not be saved")
