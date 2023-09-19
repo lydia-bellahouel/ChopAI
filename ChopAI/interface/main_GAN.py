@@ -93,10 +93,10 @@ except:
 
 # Save discriminator model
 try:
-    save_discriminator(discriminator_model, path_discriminator_model)
-    print("✅ discriminator model saved")
+  save_discriminator(discriminator_model, path_discriminator_model)
+  print("✅ discriminator model saved")
 except:
-    print("❌ discriminator model could not be saved")
+  print("❌ discriminator model could not be saved")
 
 # Save generator model
 try:
@@ -114,14 +114,14 @@ except:
 
 # Save discriminator info
 try:
-    save_discriminator_info(discriminator_info_per_epoch, path_discriminator_info)
-    print("✅ discriminator info saved")
+  save_discriminator_info(discriminator_info_per_epoch, path_discriminator_info)
+  print("✅ discriminator info saved")
 except:
-    print("❌ discriminator info could not be saved")
+  print("❌ discriminator info could not be saved")
 
 # Save images generated during the training
 try:
-    save_images_generated(images_generated_per_epoch, path_images_generated_per_epoch)
-    print("✅ images generated during training saved")
+  save_images_generated(path_images_generated_per_epoch, images_generated_per_epoch)
+  print("✅ images generated during training saved")
 except:
-    print("❌ images could not be saved")
+  print("❌ images could not be saved")
