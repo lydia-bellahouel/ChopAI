@@ -42,16 +42,21 @@ def initialize_and_compile_LSTM_model(X_train, n_vocab_train):
 
     """Define model architecture"""
     model = Sequential()
-    model.add(LSTM(256,
+    model.add(LSTM(
+        int(n_vocab_train),
         input_shape=(X_train.shape[1], X_train.shape[2]),
         return_sequences=True,
     ))
-    model.add(LSTM(256))
+
+    model.add(LSTM(int(n_vocab_train/2)))
+
     model.add(Dense(n_vocab_train))
     model.add(Activation('softmax'))
     model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
 
     print('Network is created')
+
+    print("✅Model initialized and compiled")
 
     return model
 
@@ -72,13 +77,13 @@ def train_model(model, X_train, y_train):
         mode='max'
     )
 
-    es = EarlyStopping(patience=5, restore_best_weights=True)
 
-    callbacks_list = [checkpoint,es]
-
+    callbacks_list = [checkpoint]
 
     # train model :
 
-    history = model.fit(X_train, y_train, epochs=200, batch_size=32 ,callbacks=callbacks_list, validation_split=0.2, verbose=1)
+    history = model.fit(X_train, y_train, epochs=150, batch_size=64,callbacks=callbacks_list, validation_split=0.2, verbose=1)
+
+    print("✅Model trained")
 
     return history
