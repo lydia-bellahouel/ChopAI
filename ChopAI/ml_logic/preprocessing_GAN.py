@@ -149,6 +149,7 @@ def get_clean_midi_data_as_images(midi_folder_path, output_folder_path, image_he
     --> midi_folder_path: path to the folder where all midi files are stored
     --> output_folder_path: path to the folder where we wish to save created images
     """
+
     # Storing all midi files into a 'files_raw' list
     files_raw = [file for file in os.listdir(midi_folder_path)]
 
@@ -235,11 +236,16 @@ def show_image_from_pixels(pixels_matrix, image_number):
 ############################################################################
 
 if __name__ == '__main__':
+    
+    root_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+    path_data_raw = os.path.join(root_path,'data_raw')
+    path_data_image = os.path.join(root_path,'data_image')
+    path_data_image_cleaned = os.path.join(root_path,'data_image_cleaned')
 
     # Selecting music pieces with one piano only and converting them to images
     # Images stored in the 'data_image' folder
     try:
-        get_clean_midi_data_as_images('../../data_raw/', '../../data_image/')
+        get_clean_midi_data_as_images(path_data_raw, path_data_image)
         print("✅ images created")
     except:
         print("❌ data transformation could not run")
@@ -247,7 +253,7 @@ if __name__ == '__main__':
     # Cleaning the dataset of images
     # Images stored in the 'data_image_cleaned' folder
     try:
-        clean_images('../../data_image/', '../../data_image_cleaned/')
+        clean_images(path_data_image, path_data_image_cleaned)
         print("✅ images cleaned")
     except:
         print("❌ images' cleaning could not run")
@@ -256,7 +262,7 @@ if __name__ == '__main__':
     # All images are stored one by one in an array of dimension n_images * 106 * 106 * 1
     # 106 x 106 = image dimension / 1 = additional dimension needed for RNN input
     try:
-        pixels = get_pixels_array('../../data_image_cleaned/')
+        pixels = get_pixels_array(path_data_image_cleaned)
         print("✅ dataset as array available in 'pixels' variable")
     except:
         print("❌ conversion of images into array could not run")
